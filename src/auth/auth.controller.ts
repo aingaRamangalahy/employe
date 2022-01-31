@@ -8,12 +8,12 @@ import { SignInPayload } from './interfaces/signin-payload.interface';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/signup')
-  signUp(
-    @Body() authCredentialsDto: AuthCredentialsDto,
-  ): Promise<SignInPayload> {
-    return this.authService.signUp(authCredentialsDto);
-  }
+  // @Post('/signup')
+  // signUp(
+  //   @Body() authCredentialsDto: AuthCredentialsDto,
+  // ): Promise<SignInPayload> {
+  //   return this.authService.signUp(authCredentialsDto);
+  // }
 
   @Post('/signin')
   signIn(
@@ -22,18 +22,18 @@ export class AuthController {
     return this.authService.signIn(authCredentialsDto);
   }
 
-  @Post('/forgotpassword')
-  forgotPassword(
-    @Body() forgotPasswordDto: ForgotPasswordDto,
-  ): Promise<{ message: string }> {
-    return this.authService.forgotPassword(forgotPasswordDto);
-  }
+  // @Post('/forgotpassword')
+  // forgotPassword(
+  //   @Body() forgotPasswordDto: ForgotPasswordDto,
+  // ): Promise<{ message: string }> {
+  //   return this.authService.forgotPassword(forgotPasswordDto);
+  // }
 
-  @Post('/resetpassword/:token')
-  resetPassword(
-    @Body('password') password: string,
-    @Param('token') token: string,
-  ): Promise<{ message: string }> {
-    return this.authService.resetPassword(token, password);
-  }
+  // @Post('/resetpassword/:token')
+  // resetPassword(
+  //   @Body('password') password: string,
+  //   @Param('token') token: string,
+  // ): Promise<{ message: string }> {
+  //   return this.authService.resetPassword(token, password);
+  // }
 }

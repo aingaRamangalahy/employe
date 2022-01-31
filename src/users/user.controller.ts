@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './interfaces/user.interface';
 import { UserService } from './user.service';
@@ -28,8 +29,11 @@ export class UserController {
 
   @Post()
   // @Roles('admin')
-  createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.userService.createUser(createUserDto);
+  createUser(
+    @Body() createUserDto: CreateUserDto,
+    @GetUser() user,
+  ): Promise<User> {
+    return this.userService.createUser(createUserDto, user);
   }
 
   @Put('/:id')
@@ -37,13 +41,17 @@ export class UserController {
   updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: CreateUserDto,
+    @GetUser() user,
   ): Promise<User> {
-    return this.userService.updateUser(id, updateUserDto);
+    return this.userService.updateUser(id, updateUserDto, user);
   }
 
   @Delete('/:id')
   // @Roles('admin')
-  deleteUser(@Param('id') id: string): Promise<{ message: string }> {
-    return this.userService.deleteUser(id);
+  deleteUser(
+    @Param('id') id: string,
+    @GetUser() user,
+  ): Promise<{ message: string }> {
+    return this.userService.deleteUser(id, user);
   }
 }
