@@ -6,8 +6,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { Roles } from 'src/auth/decorators/role.decorator';
+import { RoleGuard } from 'src/auth/guards/role.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './interfaces/user.interface';
 import { UserService } from './user.service';
@@ -21,23 +26,29 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
+  @Get('/audit')
+  getAllUsersAudit(): Promise<User[]> {
+    return this.userService.getAllUsersAudit();
+  }
+
   @Get('/:id')
-  // @Roles('admin')
   getUserById(@Param('id') id: string): Promise<User> {
     return this.userService.getUserById(id);
   }
 
   @Post()
-  // @Roles('admin')
+  @UseGuards(AuthGuard(), new RoleGuard(new Reflector()))
+  @Roles('admin')
   createUser(
     @Body() createUserDto: CreateUserDto,
-    @GetUser() user,
+    @GetUser() user: User,
   ): Promise<User> {
     return this.userService.createUser(createUserDto, user);
   }
 
   @Put('/:id')
-  // @Roles('admin')
+  @UseGuards(AuthGuard(), new RoleGuard(new Reflector()))
+  @Roles('admin')
   updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: CreateUserDto,
@@ -47,7 +58,8 @@ export class UserController {
   }
 
   @Delete('/:id')
-  // @Roles('admin')
+  @UseGuards(AuthGuard(), new RoleGuard(new Reflector()))
+  @Roles('admin')
   deleteUser(
     @Param('id') id: string,
     @GetUser() user,

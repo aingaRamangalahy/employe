@@ -3,13 +3,11 @@ import { Schema } from 'mongoose';
 export const UserAuditSchema = new Schema(
   {
     user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
     when: { type: Date, default: Date.now },
     who: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
     what: {
       // action
@@ -19,8 +17,7 @@ export const UserAuditSchema = new Schema(
       type: Number,
     },
     newSalaire: {
-      type: Schema.Types.ObjectId,
-      ref: 'Service',
+      type: Number,
     },
   },
   { _id: true },

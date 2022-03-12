@@ -12,7 +12,7 @@ export class UserService {
   ) {}
 
   async getAllUsers(): Promise<User[]> {
-    return this.userModel.find();
+    return this.userModel.find({ role: { $ne: 'admin' } });
   }
 
   async getUserById(userId: string): Promise<User> {
@@ -34,13 +34,14 @@ export class UserService {
     }
 
     const newAudit: UserAudit = {
-      user: newUser._id,
+      user: newUser.name,
       what: 'CREATE',
-      who: creator._id,
+      who: creator.name,
       oldSalaire: 0,
       newSalaire: newUser.salaire,
     };
-    await new this.userAuditModel(newAudit);
+    const audit = new this.userAuditModel(newAudit);
+    await audit.save();
     return await newUser.save();
   }
 
@@ -55,14 +56,14 @@ export class UserService {
     }
 
     const newAudit: UserAudit = {
-      user: verifyUser._id,
+      user: verifyUser.name,
       what: 'UPDATE',
-      who: updater._id,
+      who: updater.name,
       oldSalaire: verifyUser.salaire,
       newSalaire: user.salaire,
     };
-    await new this.userAuditModel(newAudit);
-
+    const audit = new this.userAuditModel(newAudit);
+    await audit.save();
     return await this.userModel.findByIdAndUpdate(verifyUser._id, user, {
       new: true,
     });
@@ -75,13 +76,19 @@ export class UserService {
     const user = await this.getUserById(userId);
     await this.userModel.findByIdAndDelete(user._id);
     const newAudit: UserAudit = {
-      user: user._id,
+      user: user.name,
       what: 'DELETE',
-      who: deleter._id,
+      who: deleter.name,
       oldSalaire: user.salaire,
       newSalaire: 0,
     };
-    await new this.userAuditModel(newAudit);
+    const audit = new this.userAuditModel(newAudit);
+    await audit.save();
     return { message: `user with id :"${userId}" deleted successfully` };
+  }
+
+  async getAllUsersAudit(): Promise<any> {
+    const audits = await this.userAuditModel.find().populate('user', 'who');
+    return audits;
   }
 }

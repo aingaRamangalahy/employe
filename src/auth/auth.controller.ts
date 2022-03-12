@@ -8,12 +8,12 @@ import { SignInPayload } from './interfaces/signin-payload.interface';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // @Post('/signup')
-  // signUp(
-  //   @Body() authCredentialsDto: AuthCredentialsDto,
-  // ): Promise<SignInPayload> {
-  //   return this.authService.signUp(authCredentialsDto);
-  // }
+  @Post('/signup')
+  signUp(
+    @Body() authCredentialsDto: AuthCredentialsDto,
+  ): Promise<SignInPayload> {
+    return this.authService.signUp(authCredentialsDto);
+  }
 
   @Post('/signin')
   signIn(

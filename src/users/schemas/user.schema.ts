@@ -11,7 +11,6 @@ export const UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
       select: false,
       trim: true,
     },
@@ -22,10 +21,10 @@ export const UserSchema = new Schema(
     },
     salaire: {
       type: Number,
+      default: 0,
     },
     service: {
-      type: Schema.Types.ObjectId,
-      ref: 'Service',
+      type: String,
     },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, required: false },

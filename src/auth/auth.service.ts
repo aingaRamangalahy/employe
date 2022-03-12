@@ -20,23 +20,22 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // async signUp(authCredentialsDto: AuthCredentialsDto): Promise<SignInPayload> {
-  //   const user = await this.userModel.create(authCredentialsDto);
-  //   await user.save({ validateBeforeSave: false });
-  //   const tokenPayload: JwtPayload = {
-  //     neme: user.name,
-  //     role: user.role,
-  //     _id: user._id,
-  //   };
-  //   const accessToken = await this.jwtService.sign(tokenPayload);
-  //   return {
-  //     _id: user._id,
-  //     pseudo: user.pseudo,
-  //     email: user.email,
-  //     role: user.role,
-  //     accessToken,
-  //   };
-  // }
+  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<SignInPayload> {
+    const user = await this.userModel.create(authCredentialsDto);
+    await user.save({ validateBeforeSave: false });
+    const tokenPayload: JwtPayload = {
+      name: user.name,
+      role: user.role,
+      _id: user._id,
+    };
+    const accessToken = await this.jwtService.sign(tokenPayload);
+    return {
+      _id: user._id,
+      name: user.name,
+      role: user.role,
+      accessToken,
+    };
+  }
 
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<SignInPayload> {
     const { name, password } = authCredentialsDto;
